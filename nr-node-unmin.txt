@@ -1,0 +1,1225 @@
+[ {
+    "id": "7f47a76f.80b858", "type": "MySQLdatabase", "z": "", "host": "10.0.0.1", "port": "3306", "db": "nodered-home", "tz": ""
+}
+
+,
+{
+    "id": "7a7f6ed6.85809", "type": "websocket-listener", "z": "", "path": "/ws/simple", "wholemsg": "false"
+}
+
+,
+{
+    "id":"2f1fc63.fd0e03a",
+    "type":"subflow",
+    "name":"WS OUT",
+    "info":"",
+    "in":[ {
+        "x":601.428596496582,
+        "y":264.4285888671875,
+        "wires":[ {
+            "id": "3a8892a0.c5776e"
+        }
+        ]
+    }
+    ],
+    "out":[]
+}
+
+,
+{
+    "id": "3a8892a0.c5776e", "type": "websocket out", "z": "2f1fc63.fd0e03a", "name": "", "server": "7a7f6ed6.85809", "client": "", "x": 829.9999999999999, "y": 264.2857142857143, "wires": []
+}
+
+,
+{
+    "id":"3578236b.35dadc",
+    "type":"subflow",
+    "name":"System Status",
+    "info":"",
+    "in":[ {
+        "x":280,
+        "y":300,
+        "wires":[ {
+            "id": "e8470951.4f8e28"
+        }
+        ,
+        {
+            "id": "95d89501.1e9c78"
+        }
+        ]
+    }
+    ],
+    "out":[]
+}
+
+,
+{
+    "id":"7cbb13ac.c1fd7c",
+    "type":"function",
+    "z":"3578236b.35dadc",
+    "name":"System Status Payload",
+    "func":"msg.payload = {\n    id:\"systemstatus\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 990, "y": 280, "wires": [["c3ed21cf.1231d"]]
+}
+
+,
+{
+    "id":"e8470951.4f8e28",
+    "type":"function",
+    "z":"3578236b.35dadc",
+    "name":"systemstatus",
+    "func":"if (context.global.perimeteralarm == \"1\" && context.global.interioralarm == \"1\" && context.global.firealarm == \"1\" && context.global.auxalarm == \"1\" && context.global.systemtrouble == \"1\") {\n    // msg.payload = \"<div class=\\\"callout callout-success\\\"><p>All Systems are normal</p></div>\";\n    context.global.systemstatus = \"1\";\n}\n\nif (context.global.firealarm == \"0\") {\n    // msg.payload = \"<div class=\\\"callout callout-danger\\\"><p>The Security System has an active <strong>Fire Alarm</strong></p></div>\";\n    context.global.systemstatus = \"4\";\n} \nif (context.global.interioralarm == \"0\") {\n    // msg.payload = \"<div class=\\\"callout callout-danger\\\"><p>The Security System has an active <strong>Interior Alarm</strong></p></div>\";\n    context.global.systemstatus = \"3\";\n} \nif (context.global.perimeteralarm == \"1\") {\n    // msg.payload = \"<div class=\\\"callout callout-danger\\\"><p>The Security System has an active <strong>Perimeter Alarm</strong></p></div>\";\n    context.global.systemstatus = \"2\";\n} \nif (context.global.auxalarm == \"0\") {\n    // msg.payload = \"<div class=\\\"callout callout-danger\\\"><p>The Security System has an active <strong>Fire Alarm</strong></p></div>\";\n    context.global.systemstatus = \"5\";\n} \nif (context.global.systemtrouble == \"0\") {\n    // msg.payload = \"<div class=\\\"callout callout-danger\\\"><p>The Security System has an active <strong>Fire Alarm</strong></p></div>\";\n    context.global.systemstatus = \"6\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 470, "y": 280, "wires": [["16475f48.87d101"]]
+}
+
+,
+{
+    "id": "c3ed21cf.1231d", "type": "subflow:2f1fc63.fd0e03a", "z": "3578236b.35dadc", "x": 1280, "y": 300, "wires": []
+}
+
+,
+{
+    "id":"16475f48.87d101",
+    "type":"change",
+    "z":"3578236b.35dadc",
+    "name":"systemstatus",
+    "rules":[ {
+        "t": "set", "p": "systemstatus", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":710,
+    "y":280,
+    "wires":[["7cbb13ac.c1fd7c"]]
+}
+
+,
+{
+    "id":"2ec719c7.3a4ef6",
+    "type":"function",
+    "z":"3578236b.35dadc",
+    "name":"System Status Desc Payload",
+    "func":"msg.payload = {\n    id:\"systemstatusdesc\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1000, "y": 320, "wires": [["c3ed21cf.1231d"]]
+}
+
+,
+{
+    "id":"3543ea65.5fdb76",
+    "type":"change",
+    "z":"3578236b.35dadc",
+    "name":"systemstatusdesc",
+    "rules":[ {
+        "t": "set", "p": "systemstatusdesc", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":730,
+    "y":320,
+    "wires":[["2ec719c7.3a4ef6"]]
+}
+
+,
+{
+    "id":"95d89501.1e9c78",
+    "type":"function",
+    "z":"3578236b.35dadc",
+    "name":"Numeric to Alpha",
+    "func":"if (context.global.perimeteralarm == \"1\" && context.global.interioralarm == \"1\" && context.global.firealarm == \"1\" && context.global.auxalarm == \"1\" && context.global.systemtrouble == \"1\") {\n    msg.payload = \"<div class=\\\"callout callout-success\\\"><p>All Systems are normal</p></div>\";\n    // context.global.systemstatus = \"1\";\n} \nif (context.global.perimeteralarm == \"0\") {\n    msg.payload = \"<div class=\\\"callout callout-danger\\\"><p>The Security System has an active <strong>Perimeter Alarm</strong></p></div>\";\n    // context.global.systemstatus = \"2\";\n} \nif (context.global.interioralarm == \"0\") {\n    msg.payload = \"<div class=\\\"callout callout-danger\\\"><p>The Security System has an active <strong>Interior Alarm</strong></p></div>\";\n    // context.global.systemstatus = \"3\";\n} \nif (context.global.firealarm == \"0\") {\n    msg.payload = \"<div class=\\\"callout callout-danger\\\"><p>The Security System has an active <strong>Fire Alarm</strong></p></div>\";\n    // context.global.systemstatus = \"4\";\n}\nif (context.global.auxalarm == \"0\") {\n    msg.payload = \"<div class=\\\"callout callout-danger\\\"><p>The Security System has an active <strong>Aux Alarm</strong></p></div>\";\n    // context.global.systemstatus = \"4\";\n}\nif (context.global.systemtrouble == \"0\") {\n    msg.payload = \"<div class=\\\"callout callout-warning\\\"><p>The Security System has an active <strong>Trouble Condition</strong></p></div>\";\n    // context.global.systemstatus = \"4\";\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 490, "y": 320, "wires": [["3543ea65.5fdb76"]]
+}
+
+,
+{
+    "id": "7a7f6ed6.85809", "type": "websocket-listener", "z": "", "path": "/ws/simple", "wholemsg": "false"
+}
+
+,
+{
+    "id":"2f1fc63.fd0e03a",
+    "type":"subflow",
+    "name":"WS OUT",
+    "info":"",
+    "in":[ {
+        "x":601.428596496582,
+        "y":264.4285888671875,
+        "wires":[ {
+            "id": "3a8892a0.c5776e"
+        }
+        ]
+    }
+    ],
+    "out":[]
+}
+
+,
+{
+    "id": "3a8892a0.c5776e", "type": "websocket out", "z": "2f1fc63.fd0e03a", "name": "", "server": "7a7f6ed6.85809", "client": "", "x": 829.9999999999999, "y": 264.2857142857143, "wires": []
+}
+
+,
+{
+    "id":"2f980975.d067f6",
+    "type":"subflow",
+    "name":"Armed Status",
+    "info":"",
+    "in":[ {
+        "x":213.3334150314331,
+        "y":301.6666564941406,
+        "wires":[ {
+            "id": "52cc9e7a.ad336"
+        }
+        ,
+        {
+            "id": "47cfddad.b83024"
+        }
+        ]
+    }
+    ],
+    "out":[]
+}
+
+,
+{
+    "id":"5ff36d96.a00c94",
+    "type":"function",
+    "z":"2f980975.d067f6",
+    "name":"Armed Status Payload",
+    "func":"msg.payload = {\n    id:\"armedstatus\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 940, "y": 260, "wires": [["7f6219f2.809de8"]]
+}
+
+,
+{
+    "id":"47cfddad.b83024",
+    "type":"function",
+    "z":"2f980975.d067f6",
+    "name":"armedstatus",
+    "func":"if (context.global.armedaway == \"1\" && context.global.armedstay == \"1\") {\n    // msg.payload = \"Disarmed\";\n    msg.payload = \"<div class=\\\"info-box bg-green\\\"><span class=\\\"info-box-icon\\\"><i class=\\\"ion ion-unlocked\\\"></i></span><div class=\\\"info-box-content\\\"><span class=\\\"info-box-text\\\">&nbsp;</span><span class=\\\"info-box-number\\\">Arm the System in Away</span><span class=\\\"progress-description\\\">The System is currently <strong>Disarmed</strong></span></div></div>\";\n    context.global.armedstatusstatus = \"1\";\n} \nif (context.global.armedaway == \"1\" && context.global.armedstay == \"0\") {\n    // msg.payload = \"Armed Stay\";\n    msg.payload = \"<div class=\\\"info-box bg-red\\\"><span class=\\\"info-box-icon\\\"><i class=\\\"ion ion-locked\\\"></i></span><div class=\\\"info-box-content\\\"><span class=\\\"info-box-text\\\">&nbsp;</span><span class=\\\"info-box-number\\\">Disarm the System</span><span class=\\\"progress-description\\\">The System is currently armed <strong>Stay</strong></span></div></div>\";\n    context.global.armedstatusstatus = \"0\";\n} \nif (context.global.armedaway == \"0\" && context.global.armedstay == \"1\") {\n    // msg.payload = \"Armed Away\";\n    msg.payload = \"<div class=\\\"info-box bg-red\\\"><span class=\\\"info-box-icon\\\"><i class=\\\"ion ion-locked\\\"></i></span><div class=\\\"info-box-content\\\"><span class=\\\"info-box-text\\\">&nbsp;</span><span class=\\\"info-box-number\\\">Disarm the System</span><span class=\\\"progress-description\\\">The System is currently armed <strong>Away</strong></span></div></div>\";\n    context.global.armedstatusstatus = \"0\";\n} \nif (context.global.armedaway == \"0\" && context.global.armedstay == \"0\") {\n    // msg.payload = \"Armed Away\";\n    msg.payload = \"<div class=\\\"info-box bg-red\\\"><span class=\\\"info-box-icon\\\"><i class=\\\"ion ion-locked\\\"></i></span><div class=\\\"info-box-content\\\"><span class=\\\"info-box-text\\\">&nbsp;</span><span class=\\\"info-box-number\\\">Disarm the System</span><span class=\\\"progress-description\\\">The System is currently armed <strong>Away</strong></span></div></div>\";\n    context.global.armedstatusstatus = \"0\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 430, "y": 260, "wires": [["da372a60.d94cc8"]]
+}
+
+,
+{
+    "id":"56a56895.a95a98",
+    "type":"function",
+    "z":"2f980975.d067f6",
+    "name":"Armed Status Icon Payload",
+    "func":"msg.payload = {\n    id:\"armedstatus_icon\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 960, "y": 320, "wires": [["7f6219f2.809de8"]]
+}
+
+,
+{
+    "id":"52cc9e7a.ad336",
+    "type":"function",
+    "z":"2f980975.d067f6",
+    "name":"armedstatus_icon",
+    "func":"if (context.global.armedaway == \"1\" && context.global.armedstay == \"1\") {\n    msg.payload = \"Disarmed\";\n    // msg.payload = \"<i class=\\\"fa fa-unlock fa-3x\\\"></i>\";\n} \nif (context.global.armedaway == \"1\" && context.global.armedstay == \"0\") {\n    msg.payload = \"Armed Stay\";\n    // msg.payload = \"<i class=\\\"fa fa-lock fa-3x\\\"></i>\";\n} \nif (context.global.armedaway == \"0\" && context.global.armedstay == \"1\") {\n    msg.payload = \"Armed Away\";\n    // msg.payload = \"<i class=\\\"fa fa-lock fa-3x\\\"></i>\";\n} \nif (context.global.armedaway == \"0\" && context.global.armedstay == \"0\") {\n    msg.payload = \"Armed Away\";\n    // msg.payload = \"<i class=\\\"fa fa-lock fa-3x\\\"></i>\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 450, "y": 320, "wires": [["fda348dd.0e9348"]]
+}
+
+,
+{
+    "id": "7f6219f2.809de8", "type": "subflow:2f1fc63.fd0e03a", "z": "2f980975.d067f6", "x": 1200, "y": 260, "wires": []
+}
+
+,
+{
+    "id":"da372a60.d94cc8",
+    "type":"change",
+    "z":"2f980975.d067f6",
+    "name":"armedstatus",
+    "rules":[ {
+        "t": "set", "p": "armedstatus", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":670,
+    "y":260,
+    "wires":[["5ff36d96.a00c94"]]
+}
+
+,
+{
+    "id":"fda348dd.0e9348",
+    "type":"change",
+    "z":"2f980975.d067f6",
+    "name":"armedstatus_icon",
+    "rules":[ {
+        "t": "set", "p": "armedstatus_icon", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":690,
+    "y":320,
+    "wires":[["56a56895.a95a98"]]
+}
+
+,
+{
+    "id": "7a7f6ed6.85809", "type": "websocket-listener", "z": "", "path": "/ws/simple", "wholemsg": "false"
+}
+
+,
+{
+    "id":"2f1fc63.fd0e03a",
+    "type":"subflow",
+    "name":"WS OUT",
+    "info":"",
+    "in":[ {
+        "x":601.428596496582,
+        "y":264.4285888671875,
+        "wires":[ {
+            "id": "3a8892a0.c5776e"
+        }
+        ]
+    }
+    ],
+    "out":[]
+}
+
+,
+{
+    "id": "3a8892a0.c5776e", "type": "websocket out", "z": "2f1fc63.fd0e03a", "name": "", "server": "7a7f6ed6.85809", "client": "", "x": 829.9999999999999, "y": 264.2857142857143, "wires": []
+}
+
+,
+{
+    "id": "74056a90.8bfa94", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "1", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 260, "wires": [["38936d8b.c76c92", "cebe3b87.7f37e8"]]
+}
+
+,
+{
+    "id": "1ca549ea.e35ab6", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": false, "console": "false", "complete": "payload", "x": 1050, "y": 380, "wires": []
+}
+
+,
+{
+    "id": "f06ae02a.0f952", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 300, "wires": [["38936d8b.c76c92", "cebe3b87.7f37e8"]]
+}
+
+,
+{
+    "id":"db7ea8e7.248158",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set System Ready Desc Payload",
+    "func":"msg.payload = {\n    id:\"systemreadydesc\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1120, "y": 340, "wires": [["249f217e.db60de"]]
+}
+
+,
+{
+    "id": "249f217e.db60de", "type": "subflow:2f1fc63.fd0e03a", "z": "4b4f6cc6.b4b094", "name": "", "x": 1380, "y": 320, "wires": []
+}
+
+,
+{
+    "id":"38936d8b.c76c92",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Numeric to Alpha",
+    "func":"if (msg.payload == \"0\") {\n    // msg.payload = \"The Security System is ready to arm\";\n    msg.payload = \"<a href=\\\"#\\\" class=\\\"dropdown-toggle\\\" data-toggle=\\\"dropdown\\\"><i class=\\\"fa fa-home\\\"></i><span class=\\\"label label-success\\\"><i class=\\\"fa fa-flash\\\"></i></span></a><ul class=\\\"dropdown-menu\\\"><li><ul class=\\\"menu\\\"><li><a href=\\\"#\\\"><i class=\\\"fa fa-flash text-green\\\"></i> The Security System is ready to arm</a></li></ul></li></ul>\";\n} else if (msg.payload == \"1\") {\n    // msg.payload = \"The Security System is not ready to arm\";\n    msg.payload = \"<a href=\\\"#\\\" class=\\\"dropdown-toggle\\\" data-toggle=\\\"dropdown\\\"><i class=\\\"fa fa-home\\\"></i><span class=\\\"label label-danger\\\"><i class=\\\"fa fa-flash\\\"></i></span></a><ul class=\\\"dropdown-menu\\\"><li><ul class=\\\"menu\\\"><li><a href=\\\"#\\\"><i class=\\\"fa fa-flash text-red\\\"></i> The Security System is not ready to arm</a></li></ul></li></ul>\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 610, "y": 340, "wires": [["f346327a.43946"]]
+}
+
+,
+{
+    "id": "3edf123b.d848be", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": false, "console": "false", "complete": "false", "x": 1051, "y": 260, "wires": []
+}
+
+,
+{
+    "id":"c2a471b4.d4d47",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set System Ready Payload",
+    "func":"msg.payload = {\n    id:\"systemready\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1100, "y": 300, "wires": [["249f217e.db60de"]]
+}
+
+,
+{
+    "id": "dd1500b.b448c", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "1", "payloadType": "str", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 460, "wires": [["a459f542.fc3dd8", "5d9744dc.255f8c"]]
+}
+
+,
+{
+    "id": "7338d4f9.fffc5c", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "payload", "x": 1050, "y": 580, "wires": []
+}
+
+,
+{
+    "id": "7c296178.2e58a", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 500, "wires": [["a459f542.fc3dd8", "5d9744dc.255f8c"]]
+}
+
+,
+{
+    "id":"a343aa33.b29058",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Armed Away Desc Payload",
+    "func":"msg.payload = {\n    id:\"armedawaydesc\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1110, "y": 540, "wires": [["6636da1b.c4bfa4"]]
+}
+
+,
+{
+    "id": "6636da1b.c4bfa4", "type": "subflow:2f1fc63.fd0e03a", "z": "4b4f6cc6.b4b094", "name": "", "x": 1380, "y": 520, "wires": []
+}
+
+,
+{
+    "id":"a459f542.fc3dd8",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Numeric to Alpha",
+    "func":"if (msg.payload == \"0\") {\n    msg.payload = \"The Security System is Armed Away\";\n} else if (msg.payload == \"1\") {\n    msg.payload = \"Disarmed\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 610, "y": 540, "wires": [["b4d5fbe8.50d558"]]
+}
+
+,
+{
+    "id": "523a8d2.8d60174", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 1051, "y": 460, "wires": []
+}
+
+,
+{
+    "id":"c7ac8719.241268",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Armed Away Payload",
+    "func":"msg.payload = {\n    id:\"armedaway\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1090, "y": 500, "wires": [["6636da1b.c4bfa4"]]
+}
+
+,
+{
+    "id": "f5f89321.b8d06", "type": "rbe", "z": "4b4f6cc6.b4b094", "name": "", "func": "rbe", "gap": "", "start": "", "inout": "out", "x": 410, "y": 340, "wires": [["38936d8b.c76c92"]]
+}
+
+,
+{
+    "id": "24b6fce6.7678c4", "type": "rbe", "z": "4b4f6cc6.b4b094", "name": "", "func": "rbe", "gap": "", "start": "", "inout": "out", "x": 410, "y": 540, "wires": [["a459f542.fc3dd8"]]
+}
+
+,
+{
+    "id": "97d59b32.fb21d8", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "1", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 840, "wires": [["a8ead0c5.d3194", "e3dace18.01e5e"]]
+}
+
+,
+{
+    "id": "e5cb80c6.d132e", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "payload", "x": 1050, "y": 960, "wires": []
+}
+
+,
+{
+    "id": "fa37724d.7923f", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 880, "wires": [["a8ead0c5.d3194", "e3dace18.01e5e"]]
+}
+
+,
+{
+    "id":"920b2cfe.1396b",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Perimeter Alarm Desc Payload",
+    "func":"msg.payload = {\n    id:\"perimeteralarmdesc\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1120, "y": 920, "wires": [["bbbb2248.2c177"]]
+}
+
+,
+{
+    "id": "bbbb2248.2c177", "type": "subflow:2f1fc63.fd0e03a", "z": "4b4f6cc6.b4b094", "name": "", "x": 1380, "y": 920, "wires": []
+}
+
+,
+{
+    "id":"a8ead0c5.d3194",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Numeric to Alpha",
+    "func":"if (msg.payload == \"0\") {\n    msg.payload = \"The Security System has an active Perimeter Alarm\";\n} else if (msg.payload == \"1\") {\n    msg.payload = \"\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 610, "y": 920, "wires": [["db05ecac.b1b8e"]]
+}
+
+,
+{
+    "id": "7e590a65.d62454", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 1051, "y": 840, "wires": []
+}
+
+,
+{
+    "id":"b0df962e.3e56c8",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Perimeter Alarm Payload",
+    "func":"msg.payload = {\n    id:\"perimeteralarm\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1100, "y": 880, "wires": [["bbbb2248.2c177"]]
+}
+
+,
+{
+    "id": "e64c8ddc.e3235", "type": "rbe", "z": "4b4f6cc6.b4b094", "name": "", "func": "rbe", "gap": "", "start": "", "inout": "out", "x": 410, "y": 920, "wires": [["a8ead0c5.d3194"]]
+}
+
+,
+{
+    "id": "5cd837e9.e6c3f8", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "1", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 1020, "wires": [["1ad00959.5c77b7", "87f5ccfe.be7f3"]]
+}
+
+,
+{
+    "id": "6aadd905.665cd8", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "payload", "x": 1050, "y": 1140, "wires": []
+}
+
+,
+{
+    "id": "6a87bc6.3554b44", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 1060, "wires": [["1ad00959.5c77b7", "87f5ccfe.be7f3"]]
+}
+
+,
+{
+    "id":"19d70f84.d2fcd",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Interior Alarm Desc Payload",
+    "func":"msg.payload = {\n    id:\"interioralarmdesc\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1110, "y": 1100, "wires": [["f4eb4ce4.65e08"]]
+}
+
+,
+{
+    "id": "f4eb4ce4.65e08", "type": "subflow:2f1fc63.fd0e03a", "z": "4b4f6cc6.b4b094", "name": "", "x": 1380, "y": 1100, "wires": []
+}
+
+,
+{
+    "id":"1ad00959.5c77b7",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Numeric to Alpha",
+    "func":"if (msg.payload == \"0\") {\n    msg.payload = \"The Security System has an active Interior Alarm\";\n} else if (msg.payload == \"1\") {\n    msg.payload = \"\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 610, "y": 1100, "wires": [["a49b8390.61581"]]
+}
+
+,
+{
+    "id": "c8c51405.ec2bd8", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 1051, "y": 1020, "wires": []
+}
+
+,
+{
+    "id":"4c05c317.d7a63c",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Interior Alarm Payload",
+    "func":"msg.payload = {\n    id:\"interioralarm\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1090, "y": 1060, "wires": [["f4eb4ce4.65e08"]]
+}
+
+,
+{
+    "id": "88ede52e.96bd88", "type": "rbe", "z": "4b4f6cc6.b4b094", "name": "", "func": "rbe", "gap": "", "start": "", "inout": "out", "x": 410, "y": 1100, "wires": [["1ad00959.5c77b7"]]
+}
+
+,
+{
+    "id": "cbdc5db7.97bd4", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "1", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 1200, "wires": [["b4922f9b.71538", "ad2b5b85.9e4008"]]
+}
+
+,
+{
+    "id": "9697cf51.e9e48", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "payload", "x": 1050, "y": 1320, "wires": []
+}
+
+,
+{
+    "id": "73b5db87.1311a4", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 1240, "wires": [["b4922f9b.71538", "ad2b5b85.9e4008"]]
+}
+
+,
+{
+    "id":"f857903b.ce691",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Fire Alarm Desc Payload",
+    "func":"msg.payload = {\n    id:\"firealarmdesc\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1100, "y": 1280, "wires": [["c6026cde.4fe64"]]
+}
+
+,
+{
+    "id": "c6026cde.4fe64", "type": "subflow:2f1fc63.fd0e03a", "z": "4b4f6cc6.b4b094", "name": "", "x": 1380, "y": 1280, "wires": []
+}
+
+,
+{
+    "id":"b4922f9b.71538",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Numeric to Alpha",
+    "func":"if (msg.payload == \"0\") {\n    msg.payload = \"The Security System has an active Fire Alarm\";\n} else if (msg.payload == \"1\") {\n    msg.payload = \"\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 610, "y": 1280, "wires": [["4509176b.d181c8"]]
+}
+
+,
+{
+    "id": "992b56ee.dc89c8", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 1051, "y": 1200, "wires": []
+}
+
+,
+{
+    "id":"ed3000c6.92634",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Fire Alarm Payload",
+    "func":"msg.payload = {\n    id:\"firealarm\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1080, "y": 1240, "wires": [["c6026cde.4fe64"]]
+}
+
+,
+{
+    "id": "d53f86e1.8819c8", "type": "rbe", "z": "4b4f6cc6.b4b094", "name": "", "func": "rbe", "gap": "", "start": "", "inout": "out", "x": 410, "y": 1280, "wires": [["b4922f9b.71538"]]
+}
+
+,
+{
+    "id": "173cd884.db2c67", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "1", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 1380, "wires": [["6d0b30e5.b16c8", "923ce047.7315"]]
+}
+
+,
+{
+    "id": "8836cdf4.0b03e", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "payload", "x": 1050, "y": 1500, "wires": []
+}
+
+,
+{
+    "id": "700f9a68.e55664", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 1420, "wires": [["6d0b30e5.b16c8", "923ce047.7315"]]
+}
+
+,
+{
+    "id":"835adea8.f757",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Aux Alarm Desc Payload",
+    "func":"msg.payload = {\n    id:\"auxalarmdesc\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1100, "y": 1460, "wires": [["cc3cf5cb.ddc4b8"]]
+}
+
+,
+{
+    "id": "cc3cf5cb.ddc4b8", "type": "subflow:2f1fc63.fd0e03a", "z": "4b4f6cc6.b4b094", "name": "", "x": 1380, "y": 1460, "wires": []
+}
+
+,
+{
+    "id":"6d0b30e5.b16c8",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Numeric to Alpha",
+    "func":"if (msg.payload == \"0\") {\n    msg.payload = \"The Security System has an active Aux Alarm\";\n} else if (msg.payload == \"1\") {\n    msg.payload = \"\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 610, "y": 1460, "wires": [["77e88b18.4f79b4"]]
+}
+
+,
+{
+    "id": "1d0eb90e.0a9617", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 1051, "y": 1380, "wires": []
+}
+
+,
+{
+    "id":"580bbfc8.52988",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Aux Alarm Payload",
+    "func":"msg.payload = {\n    id:\"auxalarm\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1090, "y": 1420, "wires": [["cc3cf5cb.ddc4b8"]]
+}
+
+,
+{
+    "id": "c030f898.517968", "type": "rbe", "z": "4b4f6cc6.b4b094", "name": "", "func": "rbe", "gap": "", "start": "", "inout": "out", "x": 410, "y": 1460, "wires": [["6d0b30e5.b16c8"]]
+}
+
+,
+{
+    "id": "7929722d.f4d71c", "type": "comment", "z": "4b4f6cc6.b4b094", "name": "ALARMS", "info": "", "x": 306.4285714285714, "y": 792.8571428571428, "wires": []
+}
+
+,
+{
+    "id": "6c254450.1efccc", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "1", "payloadType": "str", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 640, "wires": [["5e96ed6.9fa7414", "d43c0913.92c478"]]
+}
+
+,
+{
+    "id": "1661e4e7.4809cb", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "payload", "x": 1050, "y": 760, "wires": []
+}
+
+,
+{
+    "id": "287fe7b2.307308", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 680, "wires": [["5e96ed6.9fa7414", "d43c0913.92c478"]]
+}
+
+,
+{
+    "id":"9123fdea.76b59",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Armed Stay Desc Payload",
+    "func":"msg.payload = {\n    id:\"armedstaydesc\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1110, "y": 720, "wires": [["ac8c9863.0ad358"]]
+}
+
+,
+{
+    "id": "ac8c9863.0ad358", "type": "subflow:2f1fc63.fd0e03a", "z": "4b4f6cc6.b4b094", "name": "", "x": 1380, "y": 700, "wires": []
+}
+
+,
+{
+    "id":"5e96ed6.9fa7414",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Numeric to Alpha",
+    "func":"if (msg.payload == \"0\") {\n    msg.payload = \"The Security System is Armed Stay\";\n} else if (msg.payload == \"1\") {\n    msg.payload = \"Disarmed\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 610, "y": 720, "wires": [["28f0cac8.5d1d76"]]
+}
+
+,
+{
+    "id": "672a3d00.5a4e54", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 1051, "y": 640, "wires": []
+}
+
+,
+{
+    "id":"19f3a2cb.20265d",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set Armed Stay Payload",
+    "func":"msg.payload = {\n    id:\"armedstay\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1090, "y": 680, "wires": [["ac8c9863.0ad358"]]
+}
+
+,
+{
+    "id": "2bd3c9ee.4360b6", "type": "rbe", "z": "4b4f6cc6.b4b094", "name": "", "func": "rbe", "gap": "", "start": "", "inout": "out", "x": 410, "y": 720, "wires": [["5e96ed6.9fa7414"]]
+}
+
+,
+{
+    "id": "30215b52.af9d54", "type": "comment", "z": "4b4f6cc6.b4b094", "name": "ARMED/DISARMED", "info": "", "x": 350, "y": 400, "wires": []
+}
+
+,
+{
+    "id": "ea93a2d6.de8a9", "type": "comment", "z": "4b4f6cc6.b4b094", "name": "READY (inverted)", "info": "", "x": 340, "y": 200, "wires": []
+}
+
+,
+{
+    "id":"cebe3b87.7f37e8",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"systemready global",
+    "rules":[ {
+        "t": "set", "p": "systemready", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":850,
+    "y":300,
+    "wires":[["3edf123b.d848be",
+    "c2a471b4.d4d47",
+    "c2703239.79cd8"]]
+}
+
+,
+{
+    "id":"5d9744dc.255f8c",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"armedaway",
+    "rules":[ {
+        "t": "set", "p": "armedaway", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":830,
+    "y":500,
+    "wires":[["c7ac8719.241268",
+    "523a8d2.8d60174",
+    "91a342a4.c83fa",
+    "55594252.36f63c",
+    "39874d5c.3d2032"]]
+}
+
+,
+{
+    "id":"d43c0913.92c478",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"armedstay",
+    "rules":[ {
+        "t": "set", "p": "armedstay", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":830,
+    "y":680,
+    "wires":[["19f3a2cb.20265d",
+    "672a3d00.5a4e54",
+    "91a342a4.c83fa",
+    "39874d5c.3d2032"]]
+}
+
+,
+{
+    "id":"e3dace18.01e5e",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"perimeteralarm",
+    "rules":[ {
+        "t": "set", "p": "perimeteralarm", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":840,
+    "y":880,
+    "wires":[["7e590a65.d62454",
+    "b0df962e.3e56c8",
+    "db85b03b.4d0b7",
+    "e2cec298.5898e"]]
+}
+
+,
+{
+    "id":"87f5ccfe.be7f3",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"interioralarm",
+    "rules":[ {
+        "t": "set", "p": "interioralarm", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":810,
+    "y":1060,
+    "wires":[["c8c51405.ec2bd8",
+    "4c05c317.d7a63c",
+    "db85b03b.4d0b7",
+    "e2cec298.5898e"]]
+}
+
+,
+{
+    "id":"ad2b5b85.9e4008",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"firealarm",
+    "rules":[ {
+        "t": "set", "p": "firealarm", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":800,
+    "y":1240,
+    "wires":[["ed3000c6.92634",
+    "992b56ee.dc89c8",
+    "db85b03b.4d0b7",
+    "e2cec298.5898e"]]
+}
+
+,
+{
+    "id":"a49b8390.61581",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"interioralarmdesc",
+    "rules":[ {
+        "t": "set", "p": "interioralarmdesc", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":830,
+    "y":1100,
+    "wires":[["19d70f84.d2fcd",
+    "6aadd905.665cd8"]]
+}
+
+,
+{
+    "id":"db05ecac.b1b8e",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"perimeteralarmdesc",
+    "rules":[ {
+        "t": "set", "p": "perimeteralarmdesc", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":860,
+    "y":920,
+    "wires":[["e5cb80c6.d132e",
+    "920b2cfe.1396b"]]
+}
+
+,
+{
+    "id":"28f0cac8.5d1d76",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"armedstaydesc",
+    "rules":[ {
+        "t": "set", "p": "armedstaydesc", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":840,
+    "y":720,
+    "wires":[["1661e4e7.4809cb",
+    "9123fdea.76b59"]]
+}
+
+,
+{
+    "id":"b4d5fbe8.50d558",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"armedawaydesc",
+    "rules":[ {
+        "t": "set", "p": "armedawaydesc", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":840,
+    "y":540,
+    "wires":[["7338d4f9.fffc5c",
+    "a343aa33.b29058"]]
+}
+
+,
+{
+    "id":"f346327a.43946",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"systemreadydesc",
+    "rules":[ {
+        "t": "set", "p": "systemreadydesc", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":850,
+    "y":340,
+    "wires":[["1ca549ea.e35ab6",
+    "db7ea8e7.248158"]]
+}
+
+,
+{
+    "id":"4509176b.d181c8",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"firealarmdesc",
+    "rules":[ {
+        "t": "set", "p": "firealarmdesc", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":820,
+    "y":1280,
+    "wires":[["9697cf51.e9e48",
+    "f857903b.ce691"]]
+}
+
+,
+{
+    "id":"923ce047.7315",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"auxalarm",
+    "rules":[ {
+        "t": "set", "p": "auxalarm", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":800,
+    "y":1420,
+    "wires":[["1d0eb90e.0a9617",
+    "580bbfc8.52988",
+    "db85b03b.4d0b7",
+    "e2cec298.5898e"]]
+}
+
+,
+{
+    "id":"77e88b18.4f79b4",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"auxalarmdesc",
+    "rules":[ {
+        "t": "set", "p": "auxalarmdesc", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":820,
+    "y":1460,
+    "wires":[["8836cdf4.0b03e",
+    "835adea8.f757"]]
+}
+
+,
+{
+    "id": "91a342a4.c83fa", "type": "subflow:2f980975.d067f6", "z": "4b4f6cc6.b4b094", "name": "", "x": 860, "y": 620, "wires": []
+}
+
+,
+{
+    "id": "db85b03b.4d0b7", "type": "subflow:3578236b.35dadc", "z": "4b4f6cc6.b4b094", "name": "", "x": 840, "y": 1180, "wires": []
+}
+
+,
+{
+    "id": "7651f5be.bf76cc", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "1", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 1560, "wires": [["b0f705f7.1e4cb8", "9b98d47e.e43688"]]
+}
+
+,
+{
+    "id": "74d686cd.ed5be8", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "payload", "x": 1050, "y": 1680, "wires": []
+}
+
+,
+{
+    "id": "215b1f26.8e10e", "type": "inject", "z": "4b4f6cc6.b4b094", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 410, "y": 1600, "wires": [["b0f705f7.1e4cb8", "9b98d47e.e43688"]]
+}
+
+,
+{
+    "id":"4fa3aca.794f054",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set System Trouble Desc Payload",
+    "func":"msg.payload = {\n    id:\"systemtroubledesc\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1120, "y": 1640, "wires": [["502684b7.abb5ac"]]
+}
+
+,
+{
+    "id": "502684b7.abb5ac", "type": "subflow:2f1fc63.fd0e03a", "z": "4b4f6cc6.b4b094", "name": "", "x": 1380, "y": 1640, "wires": []
+}
+
+,
+{
+    "id":"b0f705f7.1e4cb8",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Numeric to Alpha",
+    "func":"if (msg.payload == \"0\") {\n    msg.payload = \"The Security System has an active Trouble Condition\";\n} else if (msg.payload == \"1\") {\n    msg.payload = \"\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 610, "y": 1640, "wires": [["5f58e1f1.4166b"]]
+}
+
+,
+{
+    "id": "ef0fad4d.ead0d", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 1051, "y": 1560, "wires": []
+}
+
+,
+{
+    "id":"370f9e4f.115bd2",
+    "type":"function",
+    "z":"4b4f6cc6.b4b094",
+    "name":"Set System Trouble Payload",
+    "func":"msg.payload = {\n    id:\"systemtrouble\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1100, "y": 1600, "wires": [["502684b7.abb5ac"]]
+}
+
+,
+{
+    "id": "ae090ce4.a632a", "type": "rbe", "z": "4b4f6cc6.b4b094", "name": "", "func": "rbe", "gap": "", "start": "", "inout": "out", "x": 410, "y": 1640, "wires": [["b0f705f7.1e4cb8"]]
+}
+
+,
+{
+    "id":"9b98d47e.e43688",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"systemtrouble",
+    "rules":[ {
+        "t": "set", "p": "systemtrouble", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":820,
+    "y":1600,
+    "wires":[["ef0fad4d.ead0d",
+    "370f9e4f.115bd2",
+    "db85b03b.4d0b7",
+    "e2cec298.5898e"]]
+}
+
+,
+{
+    "id":"5f58e1f1.4166b",
+    "type":"change",
+    "z":"4b4f6cc6.b4b094",
+    "name":"systemtroubledesc",
+    "rules":[ {
+        "t": "set", "p": "systemtroubledesc", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":830,
+    "y":1640,
+    "wires":[["74d686cd.ed5be8",
+    "4fa3aca.794f054"]]
+}
+
+,
+{
+    "id": "8dc8543e.d24e18", "type": "catch", "z": "4b4f6cc6.b4b094", "name": "", "scope": null, "x": 580, "y": 1740, "wires": [["328b35ab.82321a"]]
+}
+
+,
+{
+    "id": "328b35ab.82321a", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 738, "y": 1740, "wires": []
+}
+
+,
+{
+    "id": "c2703239.79cd8", "type": "function", "z": "4b4f6cc6.b4b094", "name": "Update DB", "func": "data = (msg.payload);\nvar systemReady = msg.payload;\ncontext.global.systemready = systemReady;\n\nif (data == 1) {\n  msg.topic = \"UPDATE systemready SET systemready = \" + data + \" WHERE systemreadyid = '1';\";\n  //msg.topic = \"INSERT INTO home (presenceid, home, lastin) VALUES (NULL, \" + data + \", now())\";\n} else {\n  msg.topic = \"UPDATE systemready SET systemready = \" + data + \" WHERE systemreadyid = '1';\";\n  //msg.topic = \"INSERT INTO home (presenceid, home, lastout) VALUES (NULL, \" + data + \", now())\";\n}\n\nmsg.payload = data;\nreturn msg;", "outputs": 1, "noerr": 0, "x": 830, "y": 260, "wires": [["2be52d1b.3682b2", "3813819f.53747e"]]
+}
+
+,
+{
+    "id": "2be52d1b.3682b2", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 830, "y": 220, "wires": []
+}
+
+,
+{
+    "id": "3813819f.53747e", "type": "mysql", "z": "4b4f6cc6.b4b094", "mydb": "7f47a76f.80b858", "name": "", "x": 1920, "y": 560, "wires": [["18f8e3d9.cbec3c"]]
+}
+
+,
+{
+    "id": "18f8e3d9.cbec3c", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 2110, "y": 560, "wires": []
+}
+
+,
+{
+    "id": "55594252.36f63c", "type": "function", "z": "4b4f6cc6.b4b094", "name": "Insert DB", "func": "data = (msg.payload);\nvar systemReady = msg.payload;\ncontext.global.systemready = systemReady;\n\nif (data == 1) {\n  //msg.topic = \"UPDATE alarm SET armedaway = \" + data + \" WHERE systemreadyid = '1';\";\n  msg.topic = \"INSERT INTO alarm (alarmid, armedaway, lastaction) VALUES (NULL, \" + data + \", now())\";\n} else {\n  //msg.topic = \"UPDATE systemready SET systemready = \" + data + \" WHERE systemreadyid = '1';\";\n  msg.topic = \"INSERT INTO alarm (alarmid, armedaway, lastaction) VALUES (NULL, \" + data + \", now())\";\n}\n\nmsg.payload = data;\nreturn msg;", "outputs": 1, "noerr": 0, "x": 820, "y": 460, "wires": [["824f31a2.2ec79", "3813819f.53747e"]]
+}
+
+,
+{
+    "id": "824f31a2.2ec79", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 830, "y": 420, "wires": []
+}
+
+,
+{
+    "id": "e2cec298.5898e", "type": "function", "z": "4b4f6cc6.b4b094", "name": "Insert SystemUpdate DB", "func": "data = (msg.payload);\nvar systemUpdate = msg.payload;\ncontext.global.systemUpdate = systemUpdate;\n\n//msg.topic = \"INSERT INTO alarms (alarmid, perimeter, interior, fire, aux, trouble, lastalarm, lastreset) VALUES (NULL, \"+ context.global.perimeteralarm +\",\"+ context.global.interioralarm +\",\"+ context.global.firealarm +\",\"+ context.global.auxalarm +\",\"+ context.global.systemtrouble +\",now());\";\nmsg.topic = \"INSERT INTO alarms (alarmid, perimeter, interior, fire, aux, trouble, lastalarm) VALUES (NULL, \"+context.global.perimeteralarm+\", \"+context.global.interioralarm+\", \"+context.global.firealarm+\", \"+context.global.auxalarm+\", \"+context.global.systemtrouble+\", now());\";\n\n// if (data == 1) {\n//   //msg.topic = \"UPDATE alarm SET armedaway = \" + data + \" WHERE systemreadyid = '1';\";\n//   msg.topic = \"INSERT INTO alarm (alarmid, systemready, armedaway, armedstay, perimeteralarm, interioralarm, firealarm, otheralarm, systemtrouble, lastaction, lastalarm) VALUES (NULL, 'n/a','0','0','0','0','0','0','0','now()');\n//   //msg.topic = \"INSERT INTO alarm (alarmid, armedaway, lastaction) VALUES (NULL, \" + data + \", now())\";\n// } else {\n//   //msg.topic = \"UPDATE systemready SET systemready = \" + data + \" WHERE systemreadyid = '1';\";\n//   //msg.topic = \"INSERT INTO alarm (alarmid, armedaway, lastaction) VALUES (NULL, \" + data + \", now())\";\n//   msg.topic = \"INSERT INTO alarm (alarmid, systemready, armedaway, armedstay, perimeteralarm, interioralarm, firealarm, otheralarm, systemtrouble, lastaction, lastalarm) VALUES (NULL, 'n/a','0','0','0','0','0','0','0','now()');\n// }\n\nmsg.payload = data;\nreturn msg;", "outputs": 1, "noerr": 0, "x": 1690, "y": 880, "wires": [["3813819f.53747e", "f455cc93.1f626"]]
+}
+
+,
+{
+    "id": "f455cc93.1f626", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 1910, "y": 880, "wires": []
+}
+
+,
+{
+    "id": "39874d5c.3d2032", "type": "function", "z": "4b4f6cc6.b4b094", "name": "Update ArmedSatus DB", "func": "data = (msg.payload);\nvar systemArmedUpdate = msg.payload;\ncontext.global.systemArmedUpdate = systemArmedUpdate;\n\nif (context.global.armedaway == \"1\" && context.global.armedstay == \"1\") {\n    // msg.payload = \"Disarmed\";\n    context.global.disarmed = \"1\";\n}\nif (context.global.armedaway == \"1\" && context.global.armedstay == \"0\") {\n    // msg.payload = \"Disarmed\";\n    context.global.disarmed = \"0\";\n}\nif (context.global.armedaway == \"0\" && context.global.armedstay == \"1\") {\n    // msg.payload = \"Disarmed\";\n    context.global.disarmed = \"0\";\n}\nif (context.global.armedaway == \"0\" && context.global.armedstay == \"0\") {\n    // msg.payload = \"Disarmed\";\n    context.global.disarmed = \"0\";\n} \n\n//msg.topic = \"INSERT INTO alarms (alarmid, perimeter, interior, fire, aux, trouble, lastalarm, lastreset) VALUES (NULL, \"+ context.global.perimeteralarm +\",\"+ context.global.interioralarm +\",\"+ context.global.firealarm +\",\"+ context.global.auxalarm +\",\"+ context.global.systemtrouble +\",now());\";\nmsg.topic = \"INSERT INTO armedstatus (armedid, away, stay, disarmed, lastaction) VALUES (null, \"+context.global.armedaway+\", \"+context.global.armedstay+\", \"+context.global.disarmed+\", now());\";\n\nmsg.payload = data;\nreturn msg;", "outputs": 1, "noerr": 0, "x": 1690, "y": 700, "wires": [["3813819f.53747e", "eb23cb46.099288"]]
+}
+
+,
+{
+    "id": "eb23cb46.099288", "type": "debug", "z": "4b4f6cc6.b4b094", "name": "", "active": true, "console": "false", "complete": "false", "x": 1910, "y": 700, "wires": []
+}
+
+,
+{
+    "id": "c45c2d08.5fab4", "type": "comment", "z": "4b4f6cc6.b4b094", "name": "README FIRST", "info": "Connect all your RPi inputs to the rbe nodes\n\n", "x": 340.8333282470703, "y": 118.3333330154419, "wires": []
+}
+
+]

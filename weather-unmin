@@ -1,0 +1,408 @@
+[ {
+    "id": "7a7f6ed6.85809", "type": "websocket-listener", "z": "", "path": "/ws/simple", "wholemsg": "false"
+}
+
+,
+{
+    "id":"2f1fc63.fd0e03a",
+    "type":"subflow",
+    "name":"WS OUT",
+    "info":"",
+    "in":[ {
+        "x":601.428596496582,
+        "y":264.4285888671875,
+        "wires":[ {
+            "id": "3a8892a0.c5776e"
+        }
+        ]
+    }
+    ],
+    "out":[]
+}
+
+,
+{
+    "id": "3a8892a0.c5776e", "type": "websocket out", "z": "2f1fc63.fd0e03a", "name": "", "server": "7a7f6ed6.85809", "client": "", "x": 829.9999999999999, "y": 264.2857142857143, "wires": []
+}
+
+,
+{
+    "id": "4700a301.b8ff5c", "type": "wunderground", "z": "9ce7fe71.6318", "name": "", "lon": "", "lat": "", "city": "Citrus Heights", "country": "California", "x": 414, "y": 360, "wires": [["b193703e.4e6c9", "9c7ffe12.638", "3a22c5b8.c5dd3a", "71aa27ca.8e55d8", "630a6163.9cf5a", "5da167b7.a25e98", "443c48cf.bebb38", "8cc976f1.733688", "83285a96.7cd7a8", "3785b48d.c87a4c", "e2f2854e.a99208", "1dc34844.7e7fe8", "3655902a.a6848", "2e125e69.60e872"]]
+}
+
+,
+{
+    "id": "b193703e.4e6c9", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "payload.tempc", "x": 760, "y": 60, "wires": []
+}
+
+,
+{
+    "id": "92b24561.6d4db8", "type": "inject", "z": "9ce7fe71.6318", "name": "Get Weather", "topic": "", "payload": "", "payloadType": "date", "repeat": "1800", "crontab": "", "once": true, "x": 190, "y": 360, "wires": [["4700a301.b8ff5c"]]
+}
+
+,
+{
+    "id": "9c7ffe12.638", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "payload.humidity", "x": 760, "y": 100, "wires": []
+}
+
+,
+{
+    "id": "3a22c5b8.c5dd3a", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "payload.windspeed", "x": 770, "y": 140, "wires": []
+}
+
+,
+{
+    "id": "71aa27ca.8e55d8", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "payload.winddirection", "x": 780, "y": 180, "wires": []
+}
+
+,
+{
+    "id": "630a6163.9cf5a", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "payload.forecast", "x": 760, "y": 220, "wires": []
+}
+
+,
+{
+    "id": "5da167b7.a25e98", "type": "debug", "z": "9ce7fe71.6318", "name": "complete msg", "active": false, "console": "false", "complete": "true", "x": 740, "y": 260, "wires": []
+}
+
+,
+{
+    "id": "a039b3e4.5fc65", "type": "catch", "z": "9ce7fe71.6318", "name": "", "scope": null, "x": 180, "y": 660, "wires": [["745b1eba.8ba4e"]]
+}
+
+,
+{
+    "id": "745b1eba.8ba4e", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": true, "console": "false", "complete": "false", "x": 410, "y": 660, "wires": []
+}
+
+,
+{
+    "id": "b9224e00.46ddb", "type": "subflow:2f1fc63.fd0e03a", "z": "9ce7fe71.6318", "x": 1480, "y": 500, "wires": []
+}
+
+,
+{
+    "id": "cb9e0ea9.3461f", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "false", "x": 1150, "y": 460, "wires": []
+}
+
+,
+{
+    "id": "21927aad.de6d86", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "false", "x": 1149, "y": 540, "wires": []
+}
+
+,
+{
+    "id": "83285a96.7cd7a8", "type": "function", "z": "9ce7fe71.6318", "name": "windspeed", "func": "msg.payload = msg.payload.windspeed+\" mph\";\n\nreturn msg;\n\n", "outputs": 1, "noerr": 0, "x": 730, "y": 480, "wires": [["d2f10321.40635"]]
+}
+
+,
+{
+    "id": "917029e3.6e8fd8", "type": "inject", "z": "9ce7fe71.6318", "name": "test", "topic": "", "payload": "9.7", "payloadType": "date", "repeat": "", "crontab": "", "once": true, "x": 170, "y": 600, "wires": [["57c0ebbf.a83f14"]]
+}
+
+,
+{
+    "id": "57c0ebbf.a83f14", "type": "random", "z": "9ce7fe71.6318", "name": "make some heat", "low": "1", "high": "30", "inte": "true", "x": 430, "y": 600, "wires": [["55f5af91.aa0a5"]]
+}
+
+,
+{
+    "id":"5c8338f7.a37cc8",
+    "type":"function",
+    "z":"9ce7fe71.6318",
+    "name":"Forecast Temp Payload",
+    "func":"msg.payload = {\n    id:\"forecasttemp\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1190, "y": 600, "wires": [["b9224e00.46ddb"]]
+}
+
+,
+{
+    "id": "68b790e5.97487", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "false", "x": 1150, "y": 640, "wires": []
+}
+
+,
+{
+    "id": "3785b48d.c87a4c", "type": "function", "z": "9ce7fe71.6318", "name": "Change C to F", "func": "// msg.payload = parseFloat(msg.payload.tempc * 1.8 + 32).toFixed(1)+\"&deg;<small>F</small>\";\nmsg.payload = \"Current Temperature is \"+parseFloat(msg.payload.tempc * 1.8 + 32).toFixed(1)+\"&deg;<small>F</small>\";\n\nreturn msg;", "outputs": 1, "noerr": 0, "x": 740, "y": 560, "wires": [["da98d54f.806388"]]
+}
+
+,
+{
+    "id": "55f5af91.aa0a5", "type": "function", "z": "9ce7fe71.6318", "name": "Convert C to F", "func": "// msg.payload = parseFloat(msg.payload * 1.8 + 32).toFixed(1)+\"&deg;<small>F</small>\";\nmsg.payload = \"Current Temperature is \"+parseFloat(msg.payload.tempc * 1.8 + 32).toFixed(1)+\"&deg;<small>F</small>\";\n\nreturn msg;", "outputs": 1, "noerr": 0, "x": 740, "y": 600, "wires": [["da98d54f.806388"]]
+}
+
+,
+{
+    "id": "fc8cf852.037308", "type": "inject", "z": "9ce7fe71.6318", "name": "test", "topic": "", "payload": "9.7", "payloadType": "date", "repeat": "", "crontab": "", "once": true, "x": 170, "y": 520, "wires": [["e3cd5cab.1c32a"]]
+}
+
+,
+{
+    "id": "e3cd5cab.1c32a", "type": "random", "z": "9ce7fe71.6318", "name": "generate wind", "low": "0", "high": "50", "inte": "true", "x": 420, "y": 520, "wires": [["3590be37.ca6f42"]]
+}
+
+,
+{
+    "id": "3590be37.ca6f42", "type": "function", "z": "9ce7fe71.6318", "name": "Add MPH", "func": "msg.payload = msg.payload+\" mph\";\n\nreturn msg;", "outputs": 1, "noerr": 0, "x": 720, "y": 520, "wires": [["d2f10321.40635"]]
+}
+
+,
+{
+    "id":"a28c28d5.5d73d8",
+    "type":"function",
+    "z":"9ce7fe71.6318",
+    "name":"Forecast Wind Speed Payload",
+    "func":"msg.payload = {\n    id:\"forecastwindspeed\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1210, "y": 500, "wires": [["b9224e00.46ddb"]]
+}
+
+,
+{
+    "id": "2ee4faaa.d11b06", "type": "inject", "z": "9ce7fe71.6318", "name": "test", "topic": "", "payload": "9.7", "payloadType": "date", "repeat": "", "crontab": "", "once": true, "x": 170, "y": 440, "wires": [["aab086c2.554f78"]]
+}
+
+,
+{
+    "id": "aab086c2.554f78", "type": "random", "z": "9ce7fe71.6318", "name": "make it humid", "low": "20", "high": "100", "inte": "true", "x": 420, "y": 440, "wires": [["c48973bc.3b769"]]
+}
+
+,
+{
+    "id":"8486f2f8.7b791",
+    "type":"function",
+    "z":"9ce7fe71.6318",
+    "name":"Forecast Humidity Payload",
+    "func":"msg.payload = {\n    id:\"forecasthumidity\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1200, "y": 420, "wires": [["b9224e00.46ddb"]]
+}
+
+,
+{
+    "id": "c48973bc.3b769", "type": "function", "z": "9ce7fe71.6318", "name": "", "func": "return msg;", "outputs": 1, "noerr": 0, "x": 710, "y": 440, "wires": [["f992c1ff.08f5a"]]
+}
+
+,
+{
+    "id": "24c02acf.db3fd6", "type": "comment", "z": "9ce7fe71.6318", "name": "Get weather from Wunderground", "info": "", "x": 250, "y": 100, "wires": []
+}
+
+,
+{
+    "id":"f992c1ff.08f5a",
+    "type":"change",
+    "z":"9ce7fe71.6318",
+    "name":"forecasthumidity",
+    "rules":[ {
+        "t": "set", "p": "forecasthumidity", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":950,
+    "y":420,
+    "wires":[["cb9e0ea9.3461f",
+    "8486f2f8.7b791"]]
+}
+
+,
+{
+    "id":"d2f10321.40635",
+    "type":"change",
+    "z":"9ce7fe71.6318",
+    "name":"forecastwindspeed",
+    "rules":[ {
+        "t": "set", "p": "forecastwindspeed", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":950,
+    "y":500,
+    "wires":[["21927aad.de6d86",
+    "a28c28d5.5d73d8"]]
+}
+
+,
+{
+    "id":"da98d54f.806388",
+    "type":"change",
+    "z":"9ce7fe71.6318",
+    "name":"forecasttemp",
+    "rules":[ {
+        "t": "set", "p": "forecasttemp", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":930,
+    "y":580,
+    "wires":[["68b790e5.97487",
+    "5c8338f7.a37cc8"]]
+}
+
+,
+{
+    "id": "a3dd6a6f.5f58c8", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "false", "x": 1150, "y": 740, "wires": []
+}
+
+,
+{
+    "id":"2e125e69.60e872",
+    "type":"change",
+    "z":"9ce7fe71.6318",
+    "name":"forecastdesc",
+    "rules":[ {
+        "t": "set", "p": "payload", "pt": "msg", "to": "payload.forecast", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":730,
+    "y":700,
+    "wires":[["e5c8f9f.800d808"]]
+}
+
+,
+{
+    "id":"9819ea8e.55d7e8",
+    "type":"function",
+    "z":"9ce7fe71.6318",
+    "name":"Forecast Desc Payload",
+    "func":"msg.payload = {\n    id:\"forecastdesc\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1190, "y": 700, "wires": [["b9224e00.46ddb"]]
+}
+
+,
+{
+    "id": "443c48cf.bebb38", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "data", "x": 720, "y": 300, "wires": []
+}
+
+,
+{
+    "id": "1789a745.3de619", "type": "file", "z": "9ce7fe71.6318", "name": "", "filename": "/var/tmp/test.txt", "appendNewline": true, "createDir": false, "overwriteFile": "false", "x": 1160, "y": 860, "wires": []
+}
+
+,
+{
+    "id":"e2f2854e.a99208",
+    "type":"change",
+    "z":"9ce7fe71.6318",
+    "name":"forecastdata",
+    "rules":[ {
+        "t": "set", "p": "forecastdata", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":730,
+    "y":860,
+    "wires":[[]]
+}
+
+,
+{
+    "id": "48a078bb.3d1138", "type": "debug", "z": "9ce7fe71.6318", "name": "", "active": false, "console": "false", "complete": "false", "x": 1150, "y": 820, "wires": []
+}
+
+,
+{
+    "id":"3655902a.a6848",
+    "type":"change",
+    "z":"9ce7fe71.6318",
+    "name":"forecast",
+    "rules":[ {
+        "t": "set", "p": "forecast", "pt": "global", "to": "payload.forecast", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":720,
+    "y":780,
+    "wires":[["8da1bf57.b4f51",
+    "48a078bb.3d1138"]]
+}
+
+,
+{
+    "id":"8da1bf57.b4f51",
+    "type":"function",
+    "z":"9ce7fe71.6318",
+    "name":"Forecast Payload",
+    "func":"msg.payload = {\n    id:\"forecast\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1170, "y": 780, "wires": [[]]
+}
+
+,
+{
+    "id": "8cc976f1.733688", "type": "function", "z": "9ce7fe71.6318", "name": "humidity", "func": "msg.payload = msg.payload.humidity;\n\nreturn msg;\n\n", "outputs": 1, "noerr": 0, "x": 720, "y": 400, "wires": [["f992c1ff.08f5a"]]
+}
+
+,
+{
+    "id":"1dc34844.7e7fe8",
+    "type":"change",
+    "z":"9ce7fe71.6318",
+    "name":"forecastwinddirection",
+    "rules":[ {
+        "t": "set", "p": "forecastwinddirection", "pt": "global", "to": "payload.winddirection", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":760,
+    "y":920,
+    "wires":[["1a3a19be.9b5e46"]]
+}
+
+,
+{
+    "id":"1a3a19be.9b5e46",
+    "type":"function",
+    "z":"9ce7fe71.6318",
+    "name":"Wind Direction Payload",
+    "func":"msg.payload = {\n    id:\"forecastwinddirection\",\n    value:msg.payload\n}\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1190, "y": 920, "wires": [["b9224e00.46ddb"]]
+}
+
+,
+{
+    "id":"e5c8f9f.800d808",
+    "type":"change",
+    "z":"9ce7fe71.6318",
+    "name":"forecastdesc",
+    "rules":[ {
+        "t": "set", "p": "forecastdesc", "pt": "global", "to": "payload.forecast", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":925.7142715454102,
+    "y":700.0000143051147,
+    "wires":[["a3dd6a6f.5f58c8",
+    "9819ea8e.55d7e8"]]
+}
+
+]

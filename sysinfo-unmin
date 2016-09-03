@@ -1,0 +1,363 @@
+[ {
+    "id": "7a7f6ed6.85809", "type": "websocket-listener", "z": "", "path": "/ws/simple", "wholemsg": "false"
+}
+
+,
+{
+    "id":"2f1fc63.fd0e03a",
+    "type":"subflow",
+    "name":"WS OUT",
+    "info":"",
+    "in":[ {
+        "x":601.428596496582,
+        "y":264.4285888671875,
+        "wires":[ {
+            "id": "3a8892a0.c5776e"
+        }
+        ]
+    }
+    ],
+    "out":[]
+}
+
+,
+{
+    "id": "3a8892a0.c5776e", "type": "websocket out", "z": "2f1fc63.fd0e03a", "name": "", "server": "7a7f6ed6.85809", "client": "", "x": 829.9999999999999, "y": 264.2857142857143, "wires": []
+}
+
+,
+{
+    "id": "aae77edf.80e1a", "type": "OS", "z": "856b8a47.006598", "name": "", "x": 370, "y": 260, "wires": [["a79546be.0e6378"]]
+}
+
+,
+{
+    "id": "2bc11d3.a2358e2", "type": "Drives", "z": "856b8a47.006598", "name": "", "x": 370, "y": 300, "wires": [["4779c5f7.82bbdc"]]
+}
+
+,
+{
+    "id": "c7ea1acb.4dedf8", "type": "Uptime", "z": "856b8a47.006598", "name": "", "x": 380, "y": 540, "wires": [["b8a6ac48.0ddc9"]]
+}
+
+,
+{
+    "id": "ab5d957c.1550d8", "type": "CPUs", "z": "856b8a47.006598", "name": "", "x": 370, "y": 580, "wires": [["45fef61d.74a678"]]
+}
+
+,
+{
+    "id": "220b6b2.8434794", "type": "Loadavg", "z": "856b8a47.006598", "name": "", "x": 380, "y": 620, "wires": [["a2443145.88d4e"]]
+}
+
+,
+{
+    "id": "a5e749cd.8de678", "type": "Memory", "z": "856b8a47.006598", "name": "", "x": 380, "y": 660, "wires": [["e0611831.ff4238", "1e7f6759.7be8a9", "da7c653f.851b38"]]
+}
+
+,
+{
+    "id": "cd594ed6.18a46", "type": "NetworkIntf", "z": "856b8a47.006598", "name": "", "x": 390, "y": 780, "wires": [["bf96f682.bc14c8"]]
+}
+
+,
+{
+    "id": "10df2887.ca7ef7", "type": "debug", "z": "856b8a47.006598", "name": "", "active": false, "console": "false", "complete": "false", "x": 1050, "y": 260, "wires": []
+}
+
+,
+{
+    "id": "a1a61ea2.f30a4", "type": "inject", "z": "856b8a47.006598", "name": "", "topic": "", "payload": "", "payloadType": "date", "repeat": "86400", "crontab": "", "once": true, "x": 200, "y": 260, "wires": [["aae77edf.80e1a"]]
+}
+
+,
+{
+    "id": "d428e3ba.a0e76", "type": "inject", "z": "856b8a47.006598", "name": "", "topic": "", "payload": "", "payloadType": "date", "repeat": "3600", "crontab": "", "once": true, "x": 200, "y": 300, "wires": [["2bc11d3.a2358e2"]]
+}
+
+,
+{
+    "id": "3dee176d.54a0a8", "type": "inject", "z": "856b8a47.006598", "name": "", "topic": "", "payload": "", "payloadType": "date", "repeat": "300", "crontab": "", "once": true, "x": 200, "y": 540, "wires": [["c7ea1acb.4dedf8"]]
+}
+
+,
+{
+    "id": "b824124.704ebf", "type": "inject", "z": "856b8a47.006598", "name": "", "topic": "", "payload": "", "payloadType": "date", "repeat": "86400", "crontab": "", "once": true, "x": 200, "y": 580, "wires": [["ab5d957c.1550d8"]]
+}
+
+,
+{
+    "id": "98b7925c.cc76b", "type": "inject", "z": "856b8a47.006598", "name": "", "topic": "", "payload": "", "payloadType": "date", "repeat": "300", "crontab": "", "once": true, "x": 200, "y": 620, "wires": [["220b6b2.8434794"]]
+}
+
+,
+{
+    "id": "15ac5d79.56b723", "type": "inject", "z": "856b8a47.006598", "name": "", "topic": "", "payload": "", "payloadType": "date", "repeat": "300", "crontab": "", "once": true, "x": 200, "y": 660, "wires": [["a5e749cd.8de678"]]
+}
+
+,
+{
+    "id": "ad6330bf.c0ab", "type": "inject", "z": "856b8a47.006598", "name": "", "topic": "", "payload": "", "payloadType": "date", "repeat": "43200", "crontab": "", "once": true, "x": 200, "y": 780, "wires": [["cd594ed6.18a46"]]
+}
+
+,
+{
+    "id": "58b3766a.da0798", "type": "debug", "z": "856b8a47.006598", "name": "", "active": false, "console": "false", "complete": "false", "x": 1050, "y": 300, "wires": []
+}
+
+,
+{
+    "id": "534d312.bde57d", "type": "debug", "z": "856b8a47.006598", "name": "", "active": false, "console": "false", "complete": "payload.uptime", "x": 1080, "y": 540, "wires": []
+}
+
+,
+{
+    "id": "5be1da71.7dc414", "type": "debug", "z": "856b8a47.006598", "name": "", "active": false, "console": "false", "complete": "false", "x": 1050, "y": 580, "wires": []
+}
+
+,
+{
+    "id": "ce9f1f08.21699", "type": "debug", "z": "856b8a47.006598", "name": "", "active": false, "console": "false", "complete": "payload.loadavg", "x": 1080, "y": 620, "wires": []
+}
+
+,
+{
+    "id": "1af722df.18980d", "type": "debug", "z": "856b8a47.006598", "name": "", "active": false, "console": "false", "complete": "payload.totalmem", "x": 1080, "y": 660, "wires": []
+}
+
+,
+{
+    "id": "c75a43a1.b1ac3", "type": "debug", "z": "856b8a47.006598", "name": "", "active": false, "console": "false", "complete": "false", "x": 1050, "y": 780, "wires": []
+}
+
+,
+{
+    "id":"1feeb6b8.974ec9",
+    "type":"change",
+    "z":"856b8a47.006598",
+    "name":"sysinfoos",
+    "rules":[ {
+        "t": "set", "p": "sysinfoos", "pt": "global", "to": "payload.os", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":780,
+    "y":260,
+    "wires":[["10df2887.ca7ef7",
+    "686f0b39.881ee4"]]
+}
+
+,
+{
+    "id":"4779c5f7.82bbdc",
+    "type":"change",
+    "z":"856b8a47.006598",
+    "name":"sysinfodrives",
+    "rules":[ {
+        "t": "set", "p": "sysinfodrives", "pt": "flow", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":790,
+    "y":300,
+    "wires":[["58b3766a.da0798",
+    "686f0b39.881ee4",
+    "ad3607e.f26c1f8"]]
+}
+
+,
+{
+    "id":"b8a6ac48.0ddc9",
+    "type":"change",
+    "z":"856b8a47.006598",
+    "name":"sysinfouptime",
+    "rules":[ {
+        "t": "set", "p": "sysinfouptime", "pt": "global", "to": "payload.uptime", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":800,
+    "y":540,
+    "wires":[["534d312.bde57d",
+    "686f0b39.881ee4"]]
+}
+
+,
+{
+    "id":"7cec1f8b.509f3",
+    "type":"change",
+    "z":"856b8a47.006598",
+    "name":"sysinfocpus",
+    "rules":[ {
+        "t": "set", "p": "sysinfocpus", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":790,
+    "y":580,
+    "wires":[["5be1da71.7dc414",
+    "686f0b39.881ee4"]]
+}
+
+,
+{
+    "id":"a2443145.88d4e",
+    "type":"change",
+    "z":"856b8a47.006598",
+    "name":"sysinfoload",
+    "rules":[ {
+        "t": "set", "p": "sysinfoload", "pt": "global", "to": "payload.loadavg", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":790,
+    "y":620,
+    "wires":[["ce9f1f08.21699",
+    "686f0b39.881ee4"]]
+}
+
+,
+{
+    "id":"e0611831.ff4238",
+    "type":"change",
+    "z":"856b8a47.006598",
+    "name":"sysinfomemorytotal",
+    "rules":[ {
+        "t": "set", "p": "sysinfomemorytotal", "pt": "global", "to": "payload.totalmem", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":810,
+    "y":660,
+    "wires":[["1af722df.18980d",
+    "686f0b39.881ee4"]]
+}
+
+,
+{
+    "id":"608d6822.edc9c8",
+    "type":"change",
+    "z":"856b8a47.006598",
+    "name":"sysinfonetwork",
+    "rules":[ {
+        "t": "set", "p": "sysinfonetwork", "pt": "global", "to": "payload", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":800,
+    "y":780,
+    "wires":[["c75a43a1.b1ac3",
+    "686f0b39.881ee4"]]
+}
+
+,
+{
+    "id": "686f0b39.881ee4", "type": "subflow:2f1fc63.fd0e03a", "z": "856b8a47.006598", "x": 1040, "y": 840, "wires": []
+}
+
+,
+{
+    "id": "4f013788.505628", "type": "debug", "z": "856b8a47.006598", "name": "", "active": false, "console": "false", "complete": "payload.memusage", "x": 1090, "y": 740, "wires": []
+}
+
+,
+{
+    "id": "bf96f682.bc14c8", "type": "json", "z": "856b8a47.006598", "name": "", "x": 570, "y": 780, "wires": [["608d6822.edc9c8"]]
+}
+
+,
+{
+    "id": "45fef61d.74a678", "type": "json", "z": "856b8a47.006598", "name": "", "x": 570, "y": 580, "wires": [["7cec1f8b.509f3"]]
+}
+
+,
+{
+    "id": "a79546be.0e6378", "type": "json", "z": "856b8a47.006598", "name": "", "x": 570, "y": 260, "wires": [["1feeb6b8.974ec9"]]
+}
+
+,
+{
+    "id": "7e33f159.95367", "type": "debug", "z": "856b8a47.006598", "name": "", "active": false, "console": "false", "complete": "payload.freemem", "x": 1080, "y": 700, "wires": []
+}
+
+,
+{
+    "id": "ad3607e.f26c1f8", "type": "debug", "z": "856b8a47.006598", "name": "", "active": false, "console": "false", "complete": "payload.filesystem", "x": 1098.5714111328125, "y": 344.28570556640625, "wires": []
+}
+
+,
+{
+    "id": "f26498ca.9279c8", "type": "function", "z": "856b8a47.006598", "name": "", "func": "msg.payload.uptime = \"Raspberry Pi Uptime: \"+msg.payload.uptime;\n\nreturn msg;", "outputs": 1, "noerr": 0, "x": 577.1428737640381, "y": 498.57141971588135, "wires": [[]]
+}
+
+,
+{
+    "id":"1e7f6759.7be8a9",
+    "type":"change",
+    "z":"856b8a47.006598",
+    "name":"sysinfomemoryfree",
+    "rules":[ {
+        "t": "set", "p": "sysinfomemoryfree", "pt": "global", "to": "payload.freemem", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":810,
+    "y":700,
+    "wires":[["7e33f159.95367",
+    "686f0b39.881ee4"]]
+}
+
+,
+{
+    "id":"da7c653f.851b38",
+    "type":"change",
+    "z":"856b8a47.006598",
+    "name":"sysinfomemoryusage",
+    "rules":[ {
+        "t": "set", "p": "sysinfomemoryusage", "pt": "global", "to": "payload.memusage", "tot": "msg"
+    }
+    ],
+    "action":"",
+    "property":"",
+    "from":"",
+    "to":"",
+    "reg":false,
+    "x":820,
+    "y":740,
+    "wires":[["4f013788.505628",
+    "686f0b39.881ee4"]]
+}
+
+]

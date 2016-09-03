@@ -11,4 +11,6 @@ I made a custom board to interface between the Pi and the security board. All th
 
 (FYI: The stay feature wont work on DSC systems without some elbow grease)
 
+I made unminified versions of each to make it easier to read and debug stuff!
+
 visit http://itsalllost.com/monitor-your-security-system-with-a-rpi/ for more information.

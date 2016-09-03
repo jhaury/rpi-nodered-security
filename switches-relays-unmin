@@ -1,0 +1,336 @@
+[ {
+    "id": "7a7f6ed6.85809", "type": "websocket-listener", "z": "", "path": "/ws/simple", "wholemsg": "false"
+}
+
+,
+{
+    "id":"b0c9d0c8.4f363",
+    "type":"subflow",
+    "name":"WS IN",
+    "info":"",
+    "in":[],
+    "out":[ {
+        "x":850.0000381469727,
+        "y":254.14285469055176,
+        "wires":[ {
+            "id": "43f8ccf.fbc0734", "port": 0
+        }
+        ]
+    }
+    ]
+}
+
+,
+{
+    "id": "43f8ccf.fbc0734", "type": "websocket in", "z": "b0c9d0c8.4f363", "name": "", "server": "7a7f6ed6.85809", "client": "", "x": 651.4285888671875, "y": 254.2857208251953, "wires": [[]]
+}
+
+,
+{
+    "id": "7a7f6ed6.85809", "type": "websocket-listener", "z": "", "path": "/ws/simple", "wholemsg": "false"
+}
+
+,
+{
+    "id":"2f1fc63.fd0e03a",
+    "type":"subflow",
+    "name":"WS OUT",
+    "info":"",
+    "in":[ {
+        "x":601.428596496582,
+        "y":264.4285888671875,
+        "wires":[ {
+            "id": "3a8892a0.c5776e"
+        }
+        ]
+    }
+    ],
+    "out":[]
+}
+
+,
+{
+    "id": "3a8892a0.c5776e", "type": "websocket out", "z": "2f1fc63.fd0e03a", "name": "", "server": "7a7f6ed6.85809", "client": "", "x": 829.9999999999999, "y": 264.2857142857143, "wires": []
+}
+
+,
+{
+    "id": "592ca4ef.9465cc", "type": "rpi-gpio out", "z": "2778279.fbfcfd8", "name": "Pin: 18 (top relay)", "pin": "18", "set": "", "level": "0", "out": "out", "x": 1170, "y": 260, "wires": []
+}
+
+,
+{
+    "id": "5dbbaf60.e165b", "type": "inject", "z": "2778279.fbfcfd8", "name": "", "topic": "", "payload": "1", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 1150, "y": 180, "wires": [["592ca4ef.9465cc"]]
+}
+
+,
+{
+    "id": "7a8d4b78.d5f6c4", "type": "inject", "z": "2778279.fbfcfd8", "name": "", "topic": "", "payload": "0", "payloadType": "str", "repeat": "", "crontab": "", "once": false, "x": 1150, "y": 220, "wires": [["592ca4ef.9465cc"]]
+}
+
+,
+{
+    "id": "4cb4366d.2ff2d8", "type": "rpi-gpio out", "z": "2778279.fbfcfd8", "name": "Pin:16 (bottom relay)", "pin": "16", "set": "", "level": "0", "out": "out", "x": 1180, "y": 480, "wires": []
+}
+
+,
+{
+    "id": "9e9aeeac.3fd5c", "type": "inject", "z": "2778279.fbfcfd8", "name": "", "topic": "", "payload": "1", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 1150, "y": 400, "wires": [["4cb4366d.2ff2d8"]]
+}
+
+,
+{
+    "id": "5e815203.d2923c", "type": "inject", "z": "2778279.fbfcfd8", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 1150, "y": 440, "wires": [["4cb4366d.2ff2d8"]]
+}
+
+,
+{
+    "id":"ebbdd63d.b23bc8",
+    "type":"function",
+    "z":"2778279.fbfcfd8",
+    "name":"Set Paylaod",
+    "func":"if (msg.payload.switch1 == \"1\" && context.global.switch1status === false) {\n    context.global.switch1status = true;\n    msg.payload = \"1\";\n    return msg;\n} else if (msg.payload.switch1 == \"1\" && context.global.switch1status === true) {\n    context.global.switch1status = false;\n    msg.payload = \"0\";\n    return msg;\n}",
+    "outputs": 1, "noerr": 0, "x": 590, "y": 260, "wires": [["cbf433b.e0d54d", "c9a7a7bc.440ae8", "bc67ca53.811c58"]]
+}
+
+,
+{
+    "id": "8de88639.d08688", "type": "json", "z": "2778279.fbfcfd8", "name": "", "x": 290, "y": 220, "wires": [["bf00836f.099a5", "b35446f2.6f3758", "abf21b1e.7cfa18", "bbcf1dd8.239c", "ebbdd63d.b23bc8", "e9785a5c.1ab4e8", "c658efc0.23108", "41813871.ab97c8", "9c7bdc1a.5505", "b20ffd03.ba07a"]]
+}
+
+,
+{
+    "id":"bf00836f.099a5",
+    "type":"function",
+    "z":"2778279.fbfcfd8",
+    "name":"Set Payload",
+    "func":"// if (msg.payload.switch2 == \"1\" && context.global.switch2status === false) {\n//     context.global.switch2status = true;\n//     msg.payload = \"1\";\n//     return msg;\n// } else if (msg.payload.switch2 == \"1\" && context.global.switch2status === true) {\n//     context.global.switch2status = false;\n//     msg.payload = \"0\";\n//     return msg;\n// }\n\nif (msg.payload.switch2 == \"1\") {\n    context.global.switch2status = true;\n    msg.payload = \"1\";\n    return msg;\n}",
+    "outputs": 1, "noerr": 0, "x": 590, "y": 440, "wires": [["bd6f442c.459608", "af03359e.b46b78", "e21d8180.8c14"]]
+}
+
+,
+{
+    "id": "cbf433b.e0d54d", "type": "rbe", "z": "2778279.fbfcfd8", "name": "", "func": "rbe", "gap": "", "x": 830, "y": 260, "wires": [["592ca4ef.9465cc"]]
+}
+
+,
+{
+    "id": "89484b13.0512b8", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": true, "console": "false", "complete": "false", "x": 135.71428680419922, "y": 264.2857036590576, "wires": []
+}
+
+,
+{
+    "id": "b35446f2.6f3758", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": false, "console": "false", "complete": "payload.switch1", "x": 148.85713958740234, "y": 498.571400642395, "wires": []
+}
+
+,
+{
+    "id": "bd6f442c.459608", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": true, "console": "false", "complete": "false", "x": 850, "y": 440, "wires": []
+}
+
+,
+{
+    "id": "9258e258.b8627", "type": "comment", "z": "2778279.fbfcfd8", "name": "Relay control via web page", "info": "", "x": 170, "y": 160, "wires": []
+}
+
+,
+{
+    "id": "abf21b1e.7cfa18", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": false, "console": "false", "complete": "payload.switch2", "x": 148.85713958740234, "y": 538.571400642395, "wires": []
+}
+
+,
+{
+    "id":"c9a7a7bc.440ae8",
+    "type":"function",
+    "z":"2778279.fbfcfd8",
+    "name":"Switch1 Desc Payload",
+    "func":"if (msg.payload == \"0\") {\n    msg.payload = {\n        id:\"switch1\",\n        value: \"<div class=\\\"label label-danger\\\">Off</div>\"\n        // value: 1\n    }\n    context.global.switch1statusdesc = \"<div class=\\\"label label-danger\\\">Off</div>\";\n    return msg;\n} else if (msg.payload == \"1\") {\n    msg.payload = {\n        id:\"switch1\",\n        value: \"<div class=\\\"label label-success\\\">On</div>\"\n        // value: 0\n    }\n    context.global.switch1statusdesc = \"<div class=\\\"label label-success\\\">On</div>\";\n    return msg;\n}\n",
+    "outputs": 1, "noerr": 0, "x": 880, "y": 340, "wires": [[]]
+}
+
+,
+{
+    "id":"af03359e.b46b78",
+    "type":"function",
+    "z":"2778279.fbfcfd8",
+    "name":"Switch2 Desc Payload",
+    "func":"if (msg.payload == \"0\") {\n    msg.payload = {\n        id:\"switch2\",\n        value: \"<div class=\\\"label label-danger\\\">Off</div>\"\n        // value: 1\n    }\n    context.global.switch2statusdesc = \"<div class=\\\"label label-danger\\\">Off</div>\";\n    return msg;\n} else if (msg.payload == \"1\") {\n    msg.payload = {\n        id:\"switch2\",\n        value: \"<div class=\\\"label label-success\\\">On</div>\"\n        // value: 0\n    }\n    context.global.switch2statusdesc = \"<div class=\\\"label label-success\\\">On</div>\";\n    return msg;\n}\n",
+    "outputs": 1, "noerr": 0, "x": 880, "y": 480, "wires": [[]]
+}
+
+,
+{
+    "id": "bc67ca53.811c58", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": true, "console": "false", "complete": "false", "x": 850, "y": 300, "wires": []
+}
+
+,
+{
+    "id": "bbcf1dd8.239c", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": false, "console": "false", "complete": "false", "x": 122.85713958740234, "y": 458.571400642395, "wires": []
+}
+
+,
+{
+    "id":"4bb2b60a.c85068",
+    "type":"function",
+    "z":"2778279.fbfcfd8",
+    "name":"Switcha Payload",
+    "func":"msg.payload = {\n    id:\"switchastatus\",\n    value:msg.payload\n}\n\n// if (context.global.systemready == \"1\") {\n//     msg.payload = {\n//         id:\"systemready\",\n//         value: \"<div class=\\\"col-xs-12 systemstatus panel status-ready text-center\\\">System is ready</div>\"\n//     }\n// } else if (context.global.systemready == \"0\") {\n//     msg.payload = {\n//         id:\"systemready\",\n//         value: \"<div class=\\\"col-xs-12 systemstatus panel status-notready text-center\\\">System is not ready</div>\"\n//     }}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1170, "y": 560, "wires": [["54f8ceff.06434"]]
+}
+
+,
+{
+    "id": "83eaf583.e418f8", "type": "inject", "z": "2778279.fbfcfd8", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 450, "y": 580, "wires": [["5e24b59.5fc6d4c"]]
+}
+
+,
+{
+    "id": "313c008e.d2377", "type": "inject", "z": "2778279.fbfcfd8", "name": "", "topic": "", "payload": "1", "payloadType": "str", "repeat": "", "crontab": "", "once": true, "x": 450, "y": 540, "wires": [["5e24b59.5fc6d4c"]]
+}
+
+,
+{
+    "id": "6b044f39.e52a5", "type": "globalGetSet", "z": "2778279.fbfcfd8", "name": "switchastatus", "topic": "", "context": "msg", "variable": "payload", "outContext": "global", "outVar": "switchastatus", "x": 940, "y": 560, "wires": [["4bb2b60a.c85068", "d3753f78.e8e74"]]
+}
+
+,
+{
+    "id": "d3753f78.e8e74", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": false, "console": "false", "complete": "false", "x": 1150, "y": 600, "wires": []
+}
+
+,
+{
+    "id":"5e24b59.5fc6d4c",
+    "type":"function",
+    "z":"2778279.fbfcfd8",
+    "name":"Numeric to Alpha",
+    "func":"if (msg.payload == \"1\") {\n    msg.payload = \"Switch A: <button type=\\\"button\\\" class=\\\"btn btn-secondary-outline btn-mini\\\" onclick='doit(\\\"{ \\\"switch1\\\": 1 }\\\");'>Switch Four</button>\";\n} else if (msg.payload == \"0\") {\n    msg.payload = \"Switch A: <button onclick='doit(\\\"{ \\\"switch1\\\": 0 }\\\");' class=\\\"btn btn-default btn-success\\\">On</button>\";\n}\n\nreturn msg;\n\n\n",
+    "outputs": 1, "noerr": 0, "x": 690, "y": 560, "wires": [["6b044f39.e52a5"]]
+}
+
+,
+{
+    "id":"71071fba.28b25",
+    "type":"function",
+    "z":"2778279.fbfcfd8",
+    "name":"Switchb Payload",
+    "func":"msg.payload = {\n    id:\"switchbstatus\",\n    value:msg.payload\n}\n\n// if (context.global.systemready == \"1\") {\n//     msg.payload = {\n//         id:\"systemready\",\n//         value: \"<div class=\\\"col-xs-12 systemstatus panel status-ready text-center\\\">System is ready</div>\"\n//     }\n// } else if (context.global.systemready == \"0\") {\n//     msg.payload = {\n//         id:\"systemready\",\n//         value: \"<div class=\\\"col-xs-12 systemstatus panel status-notready text-center\\\">System is not ready</div>\"\n//     }}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 1170, "y": 660, "wires": [["54f8ceff.06434"]]
+}
+
+,
+{
+    "id": "188ba0ae.4058cf", "type": "inject", "z": "2778279.fbfcfd8", "name": "", "topic": "", "payload": "0", "payloadType": "string", "repeat": "", "crontab": "", "once": false, "x": 450, "y": 680, "wires": [["b2833702.575038"]]
+}
+
+,
+{
+    "id": "8a038c8.90cdc7", "type": "inject", "z": "2778279.fbfcfd8", "name": "", "topic": "", "payload": "1", "payloadType": "string", "repeat": "", "crontab": "", "once": true, "x": 450, "y": 640, "wires": [["b2833702.575038"]]
+}
+
+,
+{
+    "id": "ccc44bd9.465a48", "type": "globalGetSet", "z": "2778279.fbfcfd8", "name": "switchbstatus", "topic": "", "context": "msg", "variable": "payload", "outContext": "global", "outVar": "switchbstatus", "x": 940, "y": 660, "wires": [["71071fba.28b25", "235c2f9e.046de"]]
+}
+
+,
+{
+    "id": "235c2f9e.046de", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": false, "console": "false", "complete": "false", "x": 1150, "y": 700, "wires": []
+}
+
+,
+{
+    "id":"b2833702.575038",
+    "type":"function",
+    "z":"2778279.fbfcfd8",
+    "name":"Numeric to Alpha",
+    "func":"if (msg.payload == \"1\") {\n    msg.payload = \"Switch B: <span class=\\\"label label-danger\\\">Off</span>\";\n} else if (msg.payload == \"0\") {\n    msg.payload = \"Switch B: <span class=\\\"label label-success\\\">On</span>\";\n}\n\nreturn msg;",
+    "outputs": 1, "noerr": 0, "x": 690, "y": 660, "wires": [["ccc44bd9.465a48"]]
+}
+
+,
+{
+    "id": "e21d8180.8c14", "type": "trigger", "z": "2778279.fbfcfd8", "op1": "1", "op2": "0", "op1type": "val", "op2type": "val", "duration": "2", "extend": false, "units": "s", "reset": "", "name": "2-Second Momentary ON", "x": 890, "y": 400, "wires": [["4cb4366d.2ff2d8"]]
+}
+
+,
+{
+    "id": "e9785a5c.1ab4e8", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": false, "console": "false", "complete": "payload.switch3", "x": 148.85713958740234, "y": 578.571400642395, "wires": []
+}
+
+,
+{
+    "id": "c658efc0.23108", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": false, "console": "false", "complete": "payload.switch4", "x": 148.85713958740234, "y": 618.571400642395, "wires": []
+}
+
+,
+{
+    "id": "41813871.ab97c8", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": false, "console": "false", "complete": "payload.switcha", "x": 148.85713958740234, "y": 678.571400642395, "wires": []
+}
+
+,
+{
+    "id": "9c7bdc1a.5505", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": false, "console": "false", "complete": "payload.switchb", "x": 148.85713958740234, "y": 718.571400642395, "wires": []
+}
+
+,
+{
+    "id": "1e517a34.991546", "type": "comment", "z": "2778279.fbfcfd8", "name": "Switch 1 (Toggle ON/OFF)", "info": "", "x": 630, "y": 180, "wires": []
+}
+
+,
+{
+    "id": "b451731b.e7605", "type": "comment", "z": "2778279.fbfcfd8", "name": "Switch 2 (M.O. 2-sec)", "info": "", "x": 620, "y": 400, "wires": []
+}
+
+,
+{
+    "id":"b20ffd03.ba07a",
+    "type":"function",
+    "z":"2778279.fbfcfd8",
+    "name":"Set armsystemaway",
+    "func":"if (msg.payload.armsystemaway == \"1\") {\n    msg.payload = \"1\";\n    return msg;\n}\n",
+    "outputs": 1, "noerr": 0, "x": 620, "y": 220, "wires": [["8d2e078b.ca4388", "611d7aea.da5524"]]
+}
+
+,
+{
+    "id": "8d2e078b.ca4388", "type": "rbe", "z": "2778279.fbfcfd8", "name": "", "func": "rbe", "gap": "", "x": 830, "y": 220, "wires": [["592ca4ef.9465cc"]]
+}
+
+,
+{
+    "id": "611d7aea.da5524", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": true, "console": "false", "complete": "false", "x": 850, "y": 180, "wires": []
+}
+
+,
+{
+    "id": "a3ddb576.911788", "type": "function", "z": "2778279.fbfcfd8", "name": "Set switch globals once at start", "func": "context.global.switchastatus = false;\ncontext.global.switchbstatus = false;\n\ncontext.global.switch1status = false;\ncontext.global.switch1statusdesc = \"<div class=\\\"label label-info\\\">N/A</div>\";\n\ncontext.global.switch2status = false;\ncontext.global.switch2statusdesc = \"<div class=\\\"label label-info\\\">N/A</div>\";\n\ncontext.global.switch3status = false;\ncontext.global.switch3statusdesc = \"<div class=\\\"label label-info\\\">N/A</div>\";\n\ncontext.global.switch4status = false;\ncontext.global.switch4statusdesc = \"<div class=\\\"label label-info\\\">N/A</div>\";\n\n// context.global.systemcondition = \"System condition is currently unknown\";\nreturn msg;", "outputs": 1, "noerr": 0, "x": 750, "y": 100, "wires": [[]]
+}
+
+,
+{
+    "id": "26cf1348.4fa49c", "type": "inject", "z": "2778279.fbfcfd8", "name": "", "topic": "", "payload": "", "payloadType": "date", "repeat": "", "crontab": "", "once": true, "x": 143.5, "y": 100, "wires": [["a3ddb576.911788"]]
+}
+
+,
+{
+    "id": "54f8ceff.06434", "type": "subflow:2f1fc63.fd0e03a", "z": "2778279.fbfcfd8", "x": 1420.7143096923828, "y": 608.5714673995972, "wires": []
+}
+
+,
+{
+    "id": "885a782f.7dad38", "type": "subflow:b0c9d0c8.4f363", "z": "2778279.fbfcfd8", "x": 110, "y": 220, "wires": [["8de88639.d08688", "89484b13.0512b8"]]
+}
+
+,
+{
+    "id": "c059ae0f.157c5", "type": "catch", "z": "2778279.fbfcfd8", "name": "", "scope": null, "x": 445.71429443359375, "y": 762.857177734375, "wires": [["383f3c86.192ab4"]]
+}
+
+,
+{
+    "id": "383f3c86.192ab4", "type": "debug", "z": "2778279.fbfcfd8", "name": "", "active": true, "console": "false", "complete": "false", "x": 603.7142944335938, "y": 762.857177734375, "wires": []
+}
+
+]
